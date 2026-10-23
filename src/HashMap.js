@@ -39,4 +39,13 @@ export class HashMap {
     // 3- key doesn't exist
     this.buckets[index].append({ key, value });
   }
+
+  get(key) {
+    const index = this.hash(key);
+    let currentNode = this.buckets[index]?.headNode();
+    while (currentNode) {
+      if (currentNode.value.key === key) return currentNode.value.value;
+      currentNode = currentNode.nextNode;
+    }
+  }
 }
