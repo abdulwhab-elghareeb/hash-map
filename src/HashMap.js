@@ -48,4 +48,14 @@ export class HashMap {
       currentNode = currentNode.nextNode;
     }
   }
+
+  has(key) {
+    const index = this.hash(key);
+    let currentNode = this.buckets[index]?.headNode();
+    while (currentNode) {
+      if (currentNode.value.key === key) return true;
+      currentNode = currentNode.nextNode;
+    }
+    return false;
+  }
 }
