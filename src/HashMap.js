@@ -111,4 +111,16 @@ export class HashMap {
     }
     return valuesArray;
   }
+
+  entries() {
+    const entriesArray = [];
+    for (let i = 0; i < this.capacity; i++) {
+      let currentNode = this.buckets[i]?.headNode();
+      while (currentNode) {
+        entriesArray.push([currentNode.value.key, currentNode.value.value]);
+        currentNode = currentNode.nextNode;
+      }
+    }
+    return entriesArray;
+  }
 }
