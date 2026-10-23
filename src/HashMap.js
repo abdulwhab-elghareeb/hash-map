@@ -58,4 +58,19 @@ export class HashMap {
     }
     return false;
   }
+
+  remove(key) {
+    const index = this.hash(key);
+    let currentNode = this.buckets[index]?.headNode();
+    let nodeIndex = 0;
+    while (currentNode) {
+      if (currentNode.value.key === key) {
+        this.buckets[index].removeAt(nodeIndex);
+        return true;
+      }
+      currentNode = currentNode.nextNode;
+      nodeIndex++;
+    }
+    return false;
+  }
 }
