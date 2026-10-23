@@ -73,4 +73,12 @@ export class HashMap {
     }
     return false;
   }
+
+  length() {
+    let count = 0;
+    for (let i = 0; i < this.capacity; i++) {
+      count += this.buckets[i]?.size() || 0;
+    }
+    return count;
+  }
 }
