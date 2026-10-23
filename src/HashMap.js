@@ -87,4 +87,16 @@ export class HashMap {
       this.buckets[i]?.clearNodes();
     }
   }
+
+  keys() {
+    const keysArray = [];
+    for (let i = 0; i < this.capacity; i++) {
+      let currentNode = this.buckets[i]?.headNode();
+      while (currentNode) {
+        keysArray.push(currentNode.value.key);
+        currentNode = currentNode.nextNode;
+      }
+    }
+    return keysArray;
+  }
 }
