@@ -99,4 +99,16 @@ export class HashMap {
     }
     return keysArray;
   }
+
+  values() {
+    const valuesArray = [];
+    for (let i = 0; i < this.capacity; i++) {
+      let currentNode = this.buckets[i]?.headNode();
+      while (currentNode) {
+        valuesArray.push(currentNode.value.value);
+        currentNode = currentNode.nextNode;
+      }
+    }
+    return valuesArray;
+  }
 }
