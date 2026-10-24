@@ -1,0 +1,35 @@
+import { HashMap } from "./HashMap.js";
+import { HashSet } from "./HashSet.js";
+
+const hashMap = new HashMap();
+hashMap.set("apple", "red");
+hashMap.set("banana", "yellow");
+hashMap.set("carrot", "orange");
+hashMap.set("dog", "brown");
+hashMap.set("elephant", "gray");
+hashMap.set("frog", "green");
+hashMap.set("grape", "purple");
+hashMap.set("hat", "black");
+hashMap.set("ice cream", "white");
+hashMap.set("jacket", "blue");
+hashMap.set("kite", "pink");
+hashMap.set("lion", "golden");
+hashMap.set("moon", "silver");
+console.log(hashMap.entries());
+
+const hashSet = new HashSet();
+hashSet.set("apple");
+hashSet.set("banana");
+hashSet.set("carrot");
+hashSet.set("dog");
+hashSet.set("elephant");
+hashSet.set("frog");
+hashSet.set("grape");
+hashSet.set("hat");
+hashSet.set("ice cream");
+hashSet.set("jacket");
+hashSet.set("kite");
+hashSet.set("lion");
+hashSet.set("moon");
+console.log(hashSet.keys());
+console.log(hashSet.toString());
