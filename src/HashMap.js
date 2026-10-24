@@ -6,10 +6,6 @@ export class HashMap {
   #length = 0;
   #buckets = new Array(this.#capacity);
 
-  get capacity() {
-    return this.#capacity;
-  }
-
   #expandBuckets() {
     const expandedArr = new Array(this.#capacity * 2);
     for (let i = 0; i < this.#capacity * 2; i++) {
@@ -17,14 +13,14 @@ export class HashMap {
     }
 
     for (const [key, value] of this.entries()) {
-      expandedArr[this.hash(key)].append({ key, value });
+      expandedArr[this.#hash(key)].append({ key, value });
     }
 
     this.#buckets = expandedArr;
     this.#capacity *= 2;
   }
 
-  hash(key) {
+  #hash(key) {
     let hashCode = 0;
 
     const primeNumber = 31;
@@ -44,8 +40,8 @@ export class HashMap {
 
     this.#length++;
 
-    // if the value already exists
-    let currentNode = this.#buckets[this.hash(key)].headNode();
+    // if the key already exists
+    let currentNode = this.#buckets[this.#hash(key)].headNode();
     while (currentNode) {
       if (currentNode.value.key === key) {
         currentNode.value.value = value;
@@ -55,8 +51,8 @@ export class HashMap {
       currentNode = currentNode.nextNode;
     }
 
-    // if the value doesn't exist
-    this.#buckets[this.hash(key)].append({ key, value });
+    // if the key doesn't exist
+    this.#buckets[this.#hash(key)].append({ key, value });
 
     if (this.#length > this.#loadFactor * this.#capacity) {
       this.#expandBuckets();
@@ -64,7 +60,7 @@ export class HashMap {
   }
 
   get(key) {
-    let currentNode = this.#buckets[this.hash(key)].headNode();
+    let currentNode = this.#buckets[this.#hash(key)].headNode();
     while (currentNode) {
       if (currentNode.value.key === key) return currentNode.value.value;
       currentNode = currentNode.nextNode;
@@ -72,7 +68,7 @@ export class HashMap {
   }
 
   has(key) {
-    let currentNode = this.#buckets[this.hash(key)].headNode();
+    let currentNode = this.#buckets[this.#hash(key)].headNode();
     while (currentNode) {
       if (currentNode.value.key === key) return true;
       currentNode = currentNode.nextNode;
@@ -81,12 +77,12 @@ export class HashMap {
   }
 
   remove(key) {
-    let currentNode = this.#buckets[this.hash(key)].headNode();
+    let currentNode = this.#buckets[this.#hash(key)].headNode();
     let nodeIndex = 0;
 
     while (currentNode) {
       if (currentNode.value.key === key) {
-        this.#buckets[this.hash(key)].removeAt(nodeIndex);
+        this.#buckets[this.#hash(key)].removeAt(nodeIndex);
         this.#length--;
         return true;
       }
