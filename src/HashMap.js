@@ -4,14 +4,14 @@ export class HashMap {
   #loadFactor = 0.75;
   #capacity = 16;
   #length = 0;
-  buckets = new Array(this.#capacity);
+  #buckets = new Array(this.#capacity);
 
   get capacity() {
     return this.#capacity;
   }
 
   #expandBuckets() {
-    const expandedArr = new Array(this.#capacity);
+    const expandedArr = new Array(this.#capacity * 2);
     for (let i = 0; i < this.#capacity * 2; i++) {
       expandedArr[i] = new LinkedList();
     }
@@ -20,7 +20,7 @@ export class HashMap {
       expandedArr[this.hash(key)].append({ key, value });
     }
 
-    this.buckets = expandedArr;
+    this.#buckets = expandedArr;
     this.#capacity *= 2;
   }
 
@@ -36,16 +36,16 @@ export class HashMap {
   }
 
   set(key, value) {
-    if (this.#length === 0) {
+    if (this.#length === 0 && this.#capacity === 16) {
       for (let i = 0; i < this.#capacity; i++) {
-        this.buckets[i] = new LinkedList();
+        this.#buckets[i] = new LinkedList();
       }
     }
 
-    const index = this.hash(key);
     this.#length++;
 
-    let currentNode = this.buckets[index].headNode();
+    // if the value already exists
+    let currentNode = this.#buckets[this.hash(key)].headNode();
     while (currentNode) {
       if (currentNode.value.key === key) {
         currentNode.value.value = value;
@@ -55,7 +55,8 @@ export class HashMap {
       currentNode = currentNode.nextNode;
     }
 
-    this.buckets[index].append({ key, value });
+    // if the value doesn't exist
+    this.#buckets[this.hash(key)].append({ key, value });
 
     if (this.#length > this.#loadFactor * this.#capacity) {
       this.#expandBuckets();
@@ -63,8 +64,7 @@ export class HashMap {
   }
 
   get(key) {
-    const index = this.hash(key);
-    let currentNode = this.buckets[index].headNode();
+    let currentNode = this.#buckets[this.hash(key)].headNode();
     while (currentNode) {
       if (currentNode.value.key === key) return currentNode.value.value;
       currentNode = currentNode.nextNode;
@@ -72,8 +72,7 @@ export class HashMap {
   }
 
   has(key) {
-    const index = this.hash(key);
-    let currentNode = this.buckets[index].headNode();
+    let currentNode = this.#buckets[this.hash(key)].headNode();
     while (currentNode) {
       if (currentNode.value.key === key) return true;
       currentNode = currentNode.nextNode;
@@ -82,13 +81,12 @@ export class HashMap {
   }
 
   remove(key) {
-    const index = this.hash(key);
-    let currentNode = this.buckets[index].headNode();
+    let currentNode = this.#buckets[this.hash(key)].headNode();
     let nodeIndex = 0;
 
     while (currentNode) {
       if (currentNode.value.key === key) {
-        this.buckets[index].removeAt(nodeIndex);
+        this.#buckets[this.hash(key)].removeAt(nodeIndex);
         this.#length--;
         return true;
       }
@@ -104,15 +102,16 @@ export class HashMap {
 
   clear() {
     for (let i = 0; i < this.#capacity; i++) {
-      this.buckets[i].clearNodes();
+      this.#buckets[i].clearNodes();
     }
     this.#length = 0;
   }
 
   keys() {
     const keysArray = [];
+
     for (let i = 0; i < this.#capacity; i++) {
-      let currentNode = this.buckets[i].headNode();
+      let currentNode = this.#buckets[i].headNode();
       while (currentNode) {
         keysArray.push(currentNode.value.key);
         currentNode = currentNode.nextNode;
@@ -123,8 +122,9 @@ export class HashMap {
 
   values() {
     const valuesArray = [];
+
     for (let i = 0; i < this.#capacity; i++) {
-      let currentNode = this.buckets[i].headNode();
+      let currentNode = this.#buckets[i].headNode();
       while (currentNode) {
         valuesArray.push(currentNode.value.value);
         currentNode = currentNode.nextNode;
@@ -135,8 +135,9 @@ export class HashMap {
 
   entries() {
     const entriesArray = [];
+
     for (let i = 0; i < this.#capacity; i++) {
-      let currentNode = this.buckets[i].headNode();
+      let currentNode = this.#buckets[i].headNode();
       while (currentNode) {
         entriesArray.push([currentNode.value.key, currentNode.value.value]);
         currentNode = currentNode.nextNode;
