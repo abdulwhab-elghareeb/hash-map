@@ -147,7 +147,6 @@ export class LinkedList {
   }
 
   clearNodes() {
-    this.#head.nextNode = null;
     this.#head = null;
     this.#size = 0;
   }
